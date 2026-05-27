@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PredTypes.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "Implementation/TurnInPlaceMovement.h"
 #include "Modifier/ModifierImpl.h"
 #include "Modifier/ModifierTypes.h"
 #include "System/PredictedMovementVersioning.h"
@@ -113,7 +113,7 @@ private:
  * Features: Prone, Stamina, AimDownSights
  */
 UCLASS()
-class PREDICTEDMOVEMENT_API UPredictedCharacterMovement : public UCharacterMovementComponent
+class PREDICTEDMOVEMENT_API UPredictedCharacterMovement : public UTurnInPlaceMovement
 {
 	GENERATED_BODY()
 	
@@ -1128,9 +1128,9 @@ protected:
 	virtual void UpdateFromCompressedFlagsExtra(uint8 Flags);
 };
 
-class PREDICTEDMOVEMENT_API FPredictedSavedMove : public FSavedMove_Character
+class PREDICTEDMOVEMENT_API FPredictedSavedMove : public FSavedMove_Character_TurnInPlace
 {
-	using Super = FSavedMove_Character;
+	using Super = FSavedMove_Character_TurnInPlace;
 
 public:
 	FPredictedSavedMove()
@@ -1221,9 +1221,9 @@ public:
 	virtual bool IsImportantMove(const FSavedMovePtr& LastAckedMove) const override;
 };
 
-class PREDICTEDMOVEMENT_API FPredictedNetworkPredictionData_Client : public FNetworkPredictionData_Client_Character
+class PREDICTEDMOVEMENT_API FPredictedNetworkPredictionData_Client : public FNetworkPredictionData_Client_Character_TurnInPlace
 {
-	using Super = FNetworkPredictionData_Client_Character;
+	using Super = FNetworkPredictionData_Client_Character_TurnInPlace;
 
 public:
 	FPredictedNetworkPredictionData_Client(const UCharacterMovementComponent& ClientMovement)

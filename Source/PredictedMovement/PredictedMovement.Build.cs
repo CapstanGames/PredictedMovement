@@ -13,6 +13,7 @@ public class PredictedMovement : ModuleRules
 			{
 				"Core", 
 				"GameplayTags",
+				"ActorTurnInPlace",
 			}
 			);
 		
