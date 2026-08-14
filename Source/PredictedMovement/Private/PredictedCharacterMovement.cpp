@@ -1611,6 +1611,24 @@ void UPredictedCharacterMovement::UpdateCharacterStateBeforeMovement(float Delta
 	{
 		return;
 	}
+	
+	/**
+	 * < Engine bug fix for standing on a translating base while playing root motion or motion warping >
+	 * 
+	 * Root motion is converted to world through the MESH's transform, not the capsule's
+	 * (USkeletalMeshComponent::ConvertLocalRootMotionToWorld), and motion warping reads the character's position and its
+	 * own offsets from the mesh as well. The based-movement carry moves the capsule without touching the mesh's cached
+	 * ComponentToWorld, so on a moving base the mesh is a frame of base travel behind by the time the pose is ticked and
+	 * every root motion delta is converted against a stale frame. Settle it here: PerformMovement runs this before
+	 * TickCharacterPose.
+	 */
+	if (MovementBaseUtility::UseRelativeLocation(GetMovementBaseInterfaceData()))
+	{
+		if (USkeletalMeshComponent* Mesh = CharacterOwner ? CharacterOwner->GetMesh() : nullptr)
+		{
+			Mesh->UpdateComponentToWorld();
+		}
+	}
 
 	// Detect when slow fall starts
 	const bool bWasSlowFalling = IsSlowFallActive();
