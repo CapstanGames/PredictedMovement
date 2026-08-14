@@ -52,6 +52,10 @@ https://youtu.be/SHVm57AMruc
 
 # Changelog
 
+### 2.3.1
+* Fix engine bug affecting root motion and motion warping when standing on a translating base
+  * Mesh is stale and not being updated, so always a frame behind, resulting in offsets in the root motion application
+
 ### 2.3.0
 _Beta addition_
 
